@@ -3,17 +3,13 @@ import io
 import pandas as pd
 import streamlit as st
 
-st.write("""
-# SQL SRS
-Spaced Repetition System SQL practice
-""")
-
 csv = '''
 beverage,price
 orange juice,2.5
 Expresso,2
 Tea,3
 '''
+
 beverages = pd.read_csv(io.StringIO(csv))
 
 csv2 = '''
@@ -32,8 +28,21 @@ CROSS JOIN food_items
 
 solution = duckdb.sql(answer).df()
 
+
+st.write("""
+# SQL SRS
+Spaced Repetition System SQL practice
+""")
+
+with st.sidebar:
+    option = st.selectbox(
+        'What would you like to review', ('Joins', 'GroupBy', 'Windows Functions'
+                                          ), index=None, placeholder="Select option")
+    st.write(f"You selected {option}")
+
 st.header("Enter your code")
 query = st.text_area(label='Code SQL', key='user_input')
+
 if query:
     result = duckdb.sql(query).df()
     st.dataframe(result)
